@@ -434,8 +434,6 @@ select option {
     color: darkred;
 }
 
-
-/* Responsive design for screens smaller than 1300px */
 @media screen and (max-width: 1300px) {
     .recipe-section {
         grid-template-columns: repeat(2, 1fr);
@@ -473,12 +471,10 @@ select option {
     .recipe-section {
         grid-template-columns: 1fr;
         gap: 30px;
-        /* Réduction de l'écart entre les éléments */
     }
 
     .search-container {
         width: 90%;
-        /* Largeur pleine pour l'input */
         margin-top: 10px;
     }
 
@@ -489,52 +485,41 @@ select option {
 
     .recipe-count-container {
         font-size: 16px;
-        /* Réduction de la taille du texte */
+      
         padding: 10px;
     }
 
     .header-background {
         width: 100%;
-        /* Largeur pleine de l'arrière-plan */
     }
 
     h2 {
         font-size: 30px;
-        /* Taille du texte réduite */
         text-align: center;
-        /* Centrage du titre */
         max-width: 100%;
     }
 
     .input-wrapper {
         width: 100%;
-        /* Largeur pleine */
     }
 
     .text-input {
         padding: 20px 60px 20px 20px;
-        /* Ajustement du padding */
         font-size: 14px;
-        /* Réduction de la taille de police */
     }
 
     .filter-container-and-sentence {
         flex-direction: column;
         align-items: center;
-        /* Centrer horizontalement */
         justify-content: center;
-        /* Centrer verticalement */
         width: 100%;
     }
 
     .filter-container {
         display: flex;
         flex-direction: column;
-        /* Disposition en colonne */
         align-items: center;
-        /* Centrage des filtres */
         gap: 20px;
-        /* Espacement entre les filtres */
         width: 100%;
     }
 
@@ -542,16 +527,13 @@ select option {
     .appliance-filter-container,
     .utensil-filter-container {
         width: 100%;
-        /* Utiliser toute la largeur disponible */
         margin: 0 auto;
-        /* Centrage horizontal */
     }
 
     #ingredient-selector,
     #appliance-selector,
     #utensil-selector {
         width: 100%;
-        /* Largeur à 100% pour occuper tout l'espace */
         max-width: 700px;
     }
 }
@@ -559,63 +541,48 @@ select option {
 @media screen and (max-width: 425px) {
     header {
         height: 300px;
-        /* Réduction de la hauteur de l'en-tête */
     }
 
     .header-background {
         width: 100%;
-        /* Largeur pleine de l'arrière-plan */
         height: 100%;
-        /* Hauteur complète */
     }
 
     .logo {
         width: 120px;
-        /* Réduction de la largeur du logo */
         height: 20px;
-        /* Réduction de la hauteur du logo */
     }
 
     h2 {
         font-size: 28px;
-        /* Réduction de la taille du titre */
         line-height: 36px;
-        /* Ajustement de la hauteur de ligne */
         margin-bottom: 15px;
-        /* Réduction de l'espacement */
         max-width: 90%;
-        /* Utilisation d'une largeur max plus petite */
     }
 
     .search-container {
         width: 90%;
-        /* Largeur pleine avec marges réduites */
-        margin-top: 15px;
-        /* Espacement réduit entre la recherche et l'en-tête */
+        margin-top: 15px; 
     }
 
     .input-wrapper {
         width: 100%;
-        /* Largeur pleine */
         height: 50px;
-        /* Hauteur ajustée */
+
     }
 
     .text-input {
         padding: 25px 70px 25px 20px;
-        /* Réduction des espacements internes */
         font-size: 14px;
-        /* Réduction de la taille de la police */
         height: 35px;
-        /* Ajustement de la hauteur */
+
     }
 
     .button {
         top: 50%;
         font-size: 14px;
-        /* Réduction de la taille du texte sur le bouton */
         padding: 8px 12px;
-        /* Réduction des espacements */
+
     }
 
 
@@ -629,58 +596,60 @@ select option {
 
 @media screen and (max-width: 320px) {
     header {
-        height: 250px; /* Réduction de la hauteur de l'en-tête */
+        height: 250px;
     }
 
     .header-background {
-        width: 100%; /* Largeur pleine de l'arrière-plan */
-        height: 100%; /* Hauteur complète */
+        width: 100%;
+        height: 100%;
     }
 
     .logo {
-        width: 100px; /* Réduction de la largeur du logo */
-        height: 15px; /* Réduction de la hauteur du logo */
+        width: 100px;
+        height: 15px;
     }
 
     h2 {
-        font-size: 22px; /* Réduction de la taille du titre */
-        line-height: 28px; /* Ajustement de la hauteur de ligne */
-        margin-bottom: 10px; /* Réduction de l'espacement */
-        max-width: 90%; /* Utilisation d'une largeur max plus petite */
+        font-size: 22px;
+        line-height: 28px;
+        margin-bottom: 10px;
+        max-width: 90%;
     }
 
     .search-container {
-        width: 85%; /* Largeur réduite pour s'adapter à l'écran */
-        margin-top: 10px; /* Espacement réduit entre la recherche et l'en-tête */
+        width: 85%;
+        margin-top: 10px;
     }
 
     .input-wrapper {
-        width: 100%; /* Largeur pleine */
-        height: 45px; /* Hauteur ajustée */
+        width: 100%;
+        height: 45px;
     }
 
     .text-input {
-        padding: 20px 50px 20px 15px; /* Réduction des espacements internes */
-        font-size: 12px; /* Réduction de la taille de la police */
-        height: 30px; /* Ajustement de la hauteur */
+        padding: 20px 50px 20px 15px;
+        font-size: 12px;
+        height: 30px;
     }
 
     .button {
         top: 50%;
-        font-size: 12px; /* Réduction de la taille du texte sur le bouton */
-        padding: 6px 10px; /* Réduction des espacements */
+        font-size: 12px;
+        padding: 6px 10px;
     }
 
     .ingredient-filter-container,
     .appliance-filter-container,
     .utensil-filter-container {
-        width: 150px; /* Réduction de la largeur des filtres */
-        margin: 0 auto; /* Centrage horizontal */
+        width: 150px;
+        margin: 0 auto;
     }
 
-    /* Ajustement des sélecteurs pour qu'ils prennent moins de place */
-    #ingredient-selector, #appliance-selector, #utensil-selector {
-        width: 150px; /* Réduction de la largeur des sélecteurs */
-        font-size: 12px; /* Réduction de la taille de la police dans les sélecteurs */
+
+    #ingredient-selector,
+    #appliance-selector,
+    #utensil-selector {
+        width: 150px;
+        font-size: 12px;
     }
 }
