@@ -4,7 +4,6 @@ const recipeSection = document.querySelector('.recipe-section');
 const ingredientFilter = document.querySelector('#ingredient-selector');
 const applianceFilter = document.querySelector('#appliance-selector');
 const ustensilFilter = document.querySelector('#utensil-selector');
-const selectedTagsContainer = document.querySelector('#selected-tags');
 const recipeCountElement = document.querySelector('#total-recipes');
 
 const selectedFilters = {
@@ -30,7 +29,7 @@ class RecipeCard {
     createCardContent() {
         const card = document.createElement('article');
         card.classList.add('recipe-card');
-        card.setAttribute('data-recipe-id', this.recipe.id);  // Correction ici
+        card.setAttribute('data-recipe-id', this.recipe.id); 
 
         const imageContainer = document.createElement('div');
         imageContainer.classList.add('image-container');
@@ -193,12 +192,17 @@ function handleSuggestionClick(suggestion, suggestionContainerId) {
 }
 
 function updateSelectedTags() {
-    selectedTagsContainer.innerHTML = '';
+ 
+    document.querySelector('#ingredient-tags').innerHTML = '';
+    document.querySelector('#appliance-tags').innerHTML = '';
+    document.querySelector('#utensil-tags').innerHTML = '';
 
+    
     selectedFilters.ingredients.forEach(tag => {
         createTag(tag, 'ingredient');
     });
 
+    
     selectedFilters.appliances.forEach(tag => {
         createTag(tag, 'appliance');
     });
@@ -219,7 +223,15 @@ function createTag(tag, type) {
     removeButton.addEventListener('click', () => removeTag(tag, type));
 
     tagElement.appendChild(removeButton);
-    selectedTagsContainer.appendChild(tagElement);
+
+   
+    if (type === 'ingredient') {
+        document.querySelector('#ingredient-tags').appendChild(tagElement);
+    } else if (type === 'appliance') {
+        document.querySelector('#appliance-tags').appendChild(tagElement);
+    } else if (type === 'utensil') {
+        document.querySelector('#utensil-tags').appendChild(tagElement);
+    }
 }
 
 function removeTag(tag, type) {
@@ -260,27 +272,15 @@ function filterRecipes() {
         }
 
         if (selectedFilters.appliances.length > 0) {
-            applianceMatch = false;
-            selectedFilters.appliances.forEach(appliance => {
-                if (recipe.appliance.toLowerCase().includes(appliance.toLowerCase())) {
-                    applianceMatch = true;
-                }
-            });
+            applianceMatch = selectedFilters.appliances.some(appliance => recipe.appliance.toLowerCase().includes(appliance.toLowerCase()));
         }
 
         if (selectedFilters.ustensils.length > 0) {
-            ustensilMatch = false;
-            selectedFilters.ustensils.forEach(ustensil => {
-                recipe.ustensils.forEach(ust => {
-                    if (ust.toLowerCase().includes(ustensil.toLowerCase())) {
-                        ustensilMatch = true;
-                    }
-                });
-            });
+            ustensilMatch = selectedFilters.ustensils.some(ustensil => recipe.ustensils.some(ust => ust.toLowerCase().includes(ustensil.toLowerCase())));
         }
 
-        if (selectedFilters.searchQuery !== '') {
-            searchMatch = recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase());
+        if (selectedFilters.searchQuery) {
+            searchMatch = recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) || recipe.description.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase());
         }
 
         return ingredientMatch && applianceMatch && ustensilMatch && searchMatch;
@@ -290,7 +290,7 @@ function filterRecipes() {
 }
 
 initializeFilters(recipes);
-filterRecipes();
+displayRecipes(recipes);
 
 
 
