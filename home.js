@@ -16,6 +16,32 @@ const selectedFilters = {
 const searchButton = document.querySelector('.button');
 const searchInput = document.querySelector('.text-input');
 
+
+const ingredientButton = document.querySelector('#ingredient-button');
+const applianceButton = document.querySelector('#appliance-button');
+const utensilButton = document.querySelector('#utensil-button');
+
+
+const ingredientInput = document.querySelector('#ingredient-selector');
+const applianceInput = document.querySelector('#appliance-selector');
+const utensilInput = document.querySelector('#utensil-selector');
+
+
+ingredientButton.addEventListener('click', () => {
+    ingredientInput.style.display = ingredientInput.style.display === 'none' ? 'block' : 'none';
+    ingredientInput.focus();
+});
+
+applianceButton.addEventListener('click', () => {
+    applianceInput.style.display = applianceInput.style.display === 'none' ? 'block' : 'none';
+    applianceInput.focus();
+});
+
+utensilButton.addEventListener('click', () => {
+    utensilInput.style.display = utensilInput.style.display === 'none' ? 'block' : 'none';
+    utensilInput.focus();
+});
+
 class RecipeCard {
     constructor(recipe) {
         this.recipe = recipe;
@@ -29,7 +55,7 @@ class RecipeCard {
     createCardContent() {
         const card = document.createElement('article');
         card.classList.add('recipe-card');
-        card.setAttribute('data-recipe-id', this.recipe.id); 
+        card.setAttribute('data-recipe-id', this.recipe.id);
 
         const imageContainer = document.createElement('div');
         imageContainer.classList.add('image-container');
@@ -38,8 +64,8 @@ class RecipeCard {
         img.alt = `Image de ${this.recipe.name}`;
         img.classList.add('recipe-image');
         img.onerror = () => {
-            img.style.display = 'none'; 
-            message.textContent = "Désolé, l'image est indisponible."; 
+            img.style.display = 'none';
+            message.textContent = "Désolé, l'image est indisponible.";
         };
 
         const timeTag = document.createElement('span');
@@ -144,7 +170,7 @@ function initializeFilters(recipes) {
 
 function showSuggestions(value, data, suggestionContainerId) {
     const suggestionsContainer = document.querySelector(`#${suggestionContainerId}`);
-    suggestionsContainer.innerHTML = ''; 
+    suggestionsContainer.innerHTML = '';
 
     if (value === '') {
         suggestionsContainer.style.display = 'none';
@@ -192,17 +218,14 @@ function handleSuggestionClick(suggestion, suggestionContainerId) {
 }
 
 function updateSelectedTags() {
- 
     document.querySelector('#ingredient-tags').innerHTML = '';
     document.querySelector('#appliance-tags').innerHTML = '';
     document.querySelector('#utensil-tags').innerHTML = '';
 
-    
     selectedFilters.ingredients.forEach(tag => {
         createTag(tag, 'ingredient');
     });
 
-    
     selectedFilters.appliances.forEach(tag => {
         createTag(tag, 'appliance');
     });
@@ -224,7 +247,6 @@ function createTag(tag, type) {
 
     tagElement.appendChild(removeButton);
 
-   
     if (type === 'ingredient') {
         document.querySelector('#ingredient-tags').appendChild(tagElement);
     } else if (type === 'appliance') {
@@ -242,177 +264,29 @@ function removeTag(tag, type) {
     } else if (type === 'utensil') {
         selectedFilters.ustensils = selectedFilters.ustensils.filter(item => item !== tag);
     }
-
     updateSelectedTags();
     filterRecipes();
 }
 
-searchButton.addEventListener('click', () => {
-    const query = searchInput.value.trim();
-    selectedFilters.searchQuery = query;
-    filterRecipes();
-});
-
 function filterRecipes() {
-    let filteredRecipes = recipes.filter(recipe => {
-        let ingredientMatch = true;
-        let applianceMatch = true;
-        let ustensilMatch = true;
-        let searchMatch = true;
-
-        if (selectedFilters.ingredients.length > 0) {
-            ingredientMatch = false;
-            selectedFilters.ingredients.forEach(ingredient => {
-                recipe.ingredients.forEach(ing => {
-                    if (ing.ingredient.toLowerCase().includes(ingredient.toLowerCase())) {
-                        ingredientMatch = true;
-                    }
-                });
-            });
-        }
-
-        if (selectedFilters.appliances.length > 0) {
-            applianceMatch = selectedFilters.appliances.some(appliance => recipe.appliance.toLowerCase().includes(appliance.toLowerCase()));
-        }
-
-        if (selectedFilters.ustensils.length > 0) {
-            ustensilMatch = selectedFilters.ustensils.some(ustensil => recipe.ustensils.some(ust => ust.toLowerCase().includes(ustensil.toLowerCase())));
-        }
-
-        if (selectedFilters.searchQuery) {
-            searchMatch = recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) || recipe.description.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase());
-        }
-
-        return ingredientMatch && applianceMatch && ustensilMatch && searchMatch;
+    const filteredRecipes = recipes.filter(recipe => {
+        const matchesIngredients = selectedFilters.ingredients.every(ingredient => 
+            recipe.ingredients.some(i => i.ingredient.toLowerCase() === ingredient)
+        );
+        const matchesAppliance = selectedFilters.appliances.length === 0 || selectedFilters.appliances.includes(recipe.appliance.toLowerCase());
+        const matchesUstensils = selectedFilters.ustensils.every(ustensil => recipe.ustensils.includes(ustensil.toLowerCase()));
+        const matchesSearchQuery = recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) || recipe.description.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase());
+        return matchesIngredients && matchesAppliance && matchesUstensils && matchesSearchQuery;
     });
 
     displayRecipes(filteredRecipes);
 }
 
+searchButton.addEventListener('click', () => {
+    selectedFilters.searchQuery = searchInput.value.trim().toLowerCase();
+    filterRecipes();
+});
+
 initializeFilters(recipes);
 displayRecipes(recipes);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
