@@ -118,37 +118,67 @@ main {
     flex-wrap: wrap;
 }
 
+.appliance-filter-container {
+    position: relative;
+}
+
+.filter-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;
+    width: 200px;
+    background-color: #FFFFFF;
+    color: #1B1B1B;
+    border: none;
+    padding: 17px 16px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 11px 11px 0 0;
+}
 
 .containeur-input-and-suggestions {
-    display: none; 
-    box-sizing: border-box; 
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    position: relative;
-    width: 100%; 
-    height: auto; 
-    max-height: 500px; 
-    padding: 10px; 
-    margin: 20px;
+    display: none;
+    box-sizing: border-box;
+    border-radius: 0 0 11px 11px;
+    background-color: #FFFFFF;
+    width: 200px;
+    height: auto;
+    max-height: 500px;
+    padding: 10px;
+    z-index: 1000;
 }
+
 
 
 
 .containeur-input-and-suggestions.show {
-    display: block; 
+    display: block;
 }
 
+.input-container {
+    position: relative;
+    width: 100%;
+}
 
 .selector {
-    font-size: 16px;
-    padding: 10px;
+    width: 100%;
+    padding: 10px 35px 10px 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    width: 163px;
-    cursor: pointer;
-    transition: border-color 0.3s ease;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.input-container i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #aaa;
+    font-size: 16px;
+    pointer-events: none;
 }
 
 #ingredient-selector option,
@@ -208,11 +238,27 @@ select option {
 .suggestions-container {
     width: 100%;
     background-color: white;
-    border: 1px solid #ccc;
+    height: 240px; 
     border-radius: 4px;
     z-index: 100;
     display: none;
+    overflow: hidden; 
 }
+
+.suggestions-container .suggestion-item {
+    padding: 10px; 
+    font-size: 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+    overflow: hidden; 
+}
+
+
+.suggestions-container .suggestion-item:hover {
+    background-color: #FFD15B; 
+    cursor: pointer; 
+}
+
 
 #ingredient-tags,
 #appliance-tags,
@@ -493,7 +539,7 @@ select option {
 
     .recipe-count-container {
         font-size: 16px;
-      
+
         padding: 10px;
     }
 
@@ -570,7 +616,7 @@ select option {
 
     .search-container {
         width: 90%;
-        margin-top: 15px; 
+        margin-top: 15px;
     }
 
     .input-wrapper {
