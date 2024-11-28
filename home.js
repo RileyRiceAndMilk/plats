@@ -42,6 +42,10 @@ searchInput.addEventListener('input', () => {
     }
 });
 
+searchButton.addEventListener('click', () => {
+    selectedFilters.searchQuery = searchInput.value.trim();  
+    filterRecipes();  
+});
 
 searchClearButton.addEventListener('click', () => {
     searchInput.value = '';
