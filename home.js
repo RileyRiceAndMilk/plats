@@ -16,11 +16,9 @@ const selectedFilters = {
 const searchButton = document.querySelector('.button');
 const searchInput = document.querySelector('.text-input');
 
-
 const ingredientButton = document.querySelector('#ingredient-button');
 const applianceButton = document.querySelector('#appliance-button');
 const utensilButton = document.querySelector('#utensil-button');
-
 
 const ingredientInput = document.querySelector('#ingredient-selector');
 const applianceInput = document.querySelector('#appliance-selector');
@@ -28,19 +26,23 @@ const utensilInput = document.querySelector('#utensil-selector');
 
 
 ingredientButton.addEventListener('click', () => {
-    ingredientInput.style.display = ingredientInput.style.display === 'none' ? 'block' : 'none';
+    const ingredientContainer = document.querySelector('#containeur-input-and-suggestions-ingredient');
+    ingredientContainer.style.display = ingredientContainer.style.display === 'none' ? 'block' : 'none';
     ingredientInput.focus();
 });
 
 applianceButton.addEventListener('click', () => {
-    applianceInput.style.display = applianceInput.style.display === 'none' ? 'block' : 'none';
+    const applianceContainer = document.querySelector('#containeur-input-and-suggestions-appliance');
+    applianceContainer.style.display = applianceContainer.style.display === 'none' ? 'block' : 'none';
     applianceInput.focus();
 });
 
 utensilButton.addEventListener('click', () => {
-    utensilInput.style.display = utensilInput.style.display === 'none' ? 'block' : 'none';
+    const utensilContainer = document.querySelector('#containeur-input-and-suggestions-utensil');
+    utensilContainer.style.display = utensilContainer.style.display === 'none' ? 'block' : 'none';
     utensilInput.focus();
 });
+
 
 class RecipeCard {
     constructor(recipe) {
@@ -124,10 +126,12 @@ class RecipeCard {
     }
 }
 
+
 function updateRecipeCount(recipes) {
     const recipeCount = recipes.length;
     recipeCountElement.textContent = `${recipeCount} recette${recipeCount > 1 ? 's' : ''}`;
 }
+
 
 function displayRecipes(recipes) {
     recipeSection.innerHTML = '';
@@ -137,6 +141,7 @@ function displayRecipes(recipes) {
     });
     updateRecipeCount(recipes);
 }
+
 
 function initializeFilters(recipes) {
     const ingredients = new Set();
@@ -168,6 +173,7 @@ function initializeFilters(recipes) {
     });
 }
 
+
 function showSuggestions(value, data, suggestionContainerId) {
     const suggestionsContainer = document.querySelector(`#${suggestionContainerId}`);
     suggestionsContainer.innerHTML = '';
@@ -196,6 +202,7 @@ function showSuggestions(value, data, suggestionContainerId) {
     });
 }
 
+// Handle the suggestion click
 function handleSuggestionClick(suggestion, suggestionContainerId) {
     if (suggestionContainerId === 'ingredient-suggestions') {
         if (!selectedFilters.ingredients.includes(suggestion)) {
@@ -217,6 +224,7 @@ function handleSuggestionClick(suggestion, suggestionContainerId) {
     filterRecipes();
 }
 
+
 function updateSelectedTags() {
     document.querySelector('#ingredient-tags').innerHTML = '';
     document.querySelector('#appliance-tags').innerHTML = '';
@@ -234,6 +242,7 @@ function updateSelectedTags() {
         createTag(tag, 'utensil');
     });
 }
+
 
 function createTag(tag, type) {
     const tagElement = document.createElement('div');
@@ -256,6 +265,7 @@ function createTag(tag, type) {
     }
 }
 
+
 function removeTag(tag, type) {
     if (type === 'ingredient') {
         selectedFilters.ingredients = selectedFilters.ingredients.filter(item => item !== tag);
@@ -268,9 +278,10 @@ function removeTag(tag, type) {
     filterRecipes();
 }
 
+
 function filterRecipes() {
     const filteredRecipes = recipes.filter(recipe => {
-        const matchesIngredients = selectedFilters.ingredients.every(ingredient => 
+        const matchesIngredients = selectedFilters.ingredients.every(ingredient =>
             recipe.ingredients.some(i => i.ingredient.toLowerCase() === ingredient)
         );
         const matchesAppliance = selectedFilters.appliances.length === 0 || selectedFilters.appliances.includes(recipe.appliance.toLowerCase());
@@ -282,11 +293,12 @@ function filterRecipes() {
     displayRecipes(filteredRecipes);
 }
 
+
 searchButton.addEventListener('click', () => {
     selectedFilters.searchQuery = searchInput.value.trim().toLowerCase();
     filterRecipes();
 });
 
+
 initializeFilters(recipes);
 displayRecipes(recipes);
-
