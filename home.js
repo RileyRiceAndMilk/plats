@@ -249,19 +249,19 @@ function initializeFilters(recipes) {
         recipe.ustensils.forEach(ustensil => ustensils.add(ustensil.toLowerCase()));
     });
 
-    ingredientFilter.setAttribute('placeholder', 'Ingrédient');
+    ingredientFilter.setAttribute('placeholder', '');
     ingredientFilter.addEventListener('input', (event) => {
         const value = event.target.value.trim().toLowerCase();
         showSuggestions(value, Array.from(ingredients), 'ingredient-suggestions');
     });
 
-    applianceFilter.setAttribute('placeholder', 'Appareil');
+    applianceFilter.setAttribute('placeholder', '');
     applianceFilter.addEventListener('input', (event) => {
         const value = event.target.value.trim().toLowerCase();
         showSuggestions(value, Array.from(appliances), 'appliance-suggestions');
     });
 
-    ustensilFilter.setAttribute('placeholder', 'Ustensile');
+    ustensilFilter.setAttribute('placeholder', '');
     ustensilFilter.addEventListener('input', (event) => {
         const value = event.target.value.trim().toLowerCase();
         showSuggestions(value, Array.from(ustensils), 'utensil-suggestions');
