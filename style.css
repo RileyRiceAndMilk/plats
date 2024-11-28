@@ -146,11 +146,8 @@ main {
     width: 200px;
     height: auto;
     max-height: 500px;
-    padding: 10px;
     z-index: 1000;
 }
-
-
 
 
 .containeur-input-and-suggestions.show {
@@ -159,7 +156,9 @@ main {
 
 .input-container {
     position: relative;
-    width: 100%;
+    width: 80%; 
+    margin: 0 auto; 
+    display: block; 
 }
 
 .selector {
@@ -243,6 +242,9 @@ select option {
     z-index: 100;
     display: none;
     overflow: hidden; 
+    font-family: 'Manrope', sans-serif;
+    line-height: 19px;
+    font-weight: 400;
 }
 
 .suggestions-container .suggestion-item {
