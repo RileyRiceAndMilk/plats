@@ -25,15 +25,6 @@ const applianceInput = document.querySelector('#appliance-selector');
 const utensilInput = document.querySelector('#utensil-selector');
 
 
-const searchClearButton = document.createElement('span');
-searchClearButton.classList.add('clear-search');
-searchClearButton.textContent = '×';
-searchInput.parentElement.appendChild(searchClearButton);
-
-
-searchClearButton.style.display = 'none';
-
-
 searchInput.addEventListener('input', () => {
     if (searchInput.value.trim()) {
         searchClearButton.style.display = 'inline';
@@ -46,13 +37,7 @@ searchButton.addEventListener('click', () => {
     selectedFilters.searchQuery = searchInput.value.trim();  
     filterRecipes();  
 });
-
-searchClearButton.addEventListener('click', () => {
-    searchInput.value = '';
-    searchClearButton.style.display = 'none';
-    selectedFilters.searchQuery = '';
-    filterRecipes();
-});
+;
 
 
 const ingredientClearButton = document.createElement('span');
