@@ -118,15 +118,35 @@ main {
     flex-wrap: wrap;
 }
 
-#ingredient-selector,
-#appliance-selector,
-#utensil-selector {
+
+.containeur-input-and-suggestions {
+    display: none; 
+    box-sizing: border-box; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    position: relative;
+    width: 100%; 
+    height: auto; 
+    max-height: 500px; 
+    padding: 10px; 
+    margin: 20px;
+}
+
+
+
+.containeur-input-and-suggestions.show {
+    display: block; 
+}
+
+
+.selector {
     font-size: 16px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
-    width: 200px;
+    width: 163px;
     cursor: pointer;
     transition: border-color 0.3s ease;
 }
@@ -186,24 +206,12 @@ select option {
 }
 
 .suggestions-container {
-    position: absolute;
     width: 100%;
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 4px;
     z-index: 100;
     display: none;
-}
-
-#ingredient-suggestions,
-#appliance-suggestions,
-#utensil-suggestions {
-    width: 220px;
-    background-color: white;
-    border: 1px solid #ccc;
-    overflow-y: auto;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 5px 0;
 }
 
 #ingredient-tags,
