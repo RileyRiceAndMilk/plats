@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-    <script type="module" src="./home.js" defer></script>
+    <script type="module" src="./home2.js"></script>
     <link rel="icon" href="favicon.png" type="image/x-icon">
     <title>Les Petits Plats</title>
 </head>
@@ -17,13 +17,12 @@
 <body>
     <header>
         <img src="lampos-aritonang-24gR_9lCdes-unsplash.jpg" alt="Background image" class="header-background">
-        <img src="Logo.png" class="logo" />
+        <img src="Logo.png" class="logo" alt="Logo les petits plats"/>
         <div class="sentence-and-container">
             <h2>CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN, SIMPLES ET DÉLICIEUSES</h2>
             <div class="search-container">
                 <div class="input-wrapper">
-                    <input type="text" class="text-input" id="search-input"
-                        placeholder="Rechercher une recette, un ingrédient, ...">
+                    <input type="text" class="text-input" id="search-input" placeholder="Rechercher une recette, un ingrédient, ...">
                     <button class="button" id="search-button" type="button">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -35,53 +34,46 @@
     <main id="main">
         <div class="filter-container-and-sentence">
             <div class="filter-container">
+                
                 <div class="ingredient-filter-container">
-                    <button id="ingredient-button" class="filter-button">Ingrédient
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
+                    <button id="ingredient-button" class="filter-button">Ingrédient <i class="fa-solid fa-chevron-down"></i></button>
                     <div id="containeur-input-and-suggestions-ingredient" class="containeur-input-and-suggestions">
                         <div class="input-container">
-                            <input type="text" class="selector" id="ingredient-selector"
-                                aria-label="Filtrer par ingrédient" placeholder="Tapez un ingrédient..." />
-                                <span class="clear-input" id="clear-input-ingredient">×</span>
+                            <input type="text" class="selector" id="ingredient-selector" aria-label="Filtrer par ingrédient" placeholder="Tapez un ingrédient..." />
+                            <span class="clear-input" id="clear-input-ingredient">×</span>
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
                         <div id="ingredient-suggestions" class="suggestions-container"></div>
                     </div>
-                    <div id="ingredient-tags" class="selected-tag-container-ingredient"></div>
+                    <div id="ingredient-tags" class="selected-tag-container"></div>
                 </div>
 
+             
                 <div class="appliance-filter-container">
-                    <button id="appliance-button" class="filter-button">Appareil
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
+                    <button id="appliance-button" class="filter-button">Appareil <i class="fa-solid fa-chevron-down"></i></button>
                     <div id="containeur-input-and-suggestions-appliance" class="containeur-input-and-suggestions">
                         <div class="input-container">
-                            <input type="text" class="selector" id="appliance-selector"
-                                aria-label="Filtrer par appareil" placeholder="Tapez un appareil..." />
-                                <span class="clear-input" id="clear-input-ingredient">×</span>
+                            <input type="text" class="selector" id="appliance-selector" aria-label="Filtrer par appareil" placeholder="Tapez un appareil..." />
+                            <span class="clear-input" id="clear-input-appliance">×</span>
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
-
                         <div id="appliance-suggestions" class="suggestions-container"></div>
                     </div>
-                    <div id="appliance-tags" class="selected-tag-container-appliance"></div>
+                    <div id="appliance-tags" class="selected-tag-container"></div>
                 </div>
 
+               
                 <div class="utensil-filter-container">
-                    <button id="utensil-button" class="filter-button">Ustensile
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
+                    <button id="utensil-button" class="filter-button">Ustensile <i class="fa-solid fa-chevron-down"></i></button>
                     <div id="containeur-input-and-suggestions-utensil" class="containeur-input-and-suggestions">
                         <div class="input-container">
-                            <input type="text" class="selector" id="utensil-selector" aria-label="Filtrer par ustensile"
-                                placeholder="Tapez un ustensile..." />
-                                <span class="clear-input" id="clear-input-ingredient">×</span>
+                            <input type="text" class="selector" id="utensil-selector" aria-label="Filtrer par ustensile" placeholder="Tapez un ustensile..." />
+                            <span class="clear-input" id="clear-input-utensil">×</span>
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
                         <div id="utensil-suggestions" class="suggestions-container"></div>
                     </div>
-                    <div id="utensil-tags" class="selected-tag-container-utensil"></div>
+                    <div id="utensil-tags" class="selected-tag-container"></div>
                 </div>
             </div>
 
@@ -90,11 +82,7 @@
             </div>
         </div>
 
-
-
-        <div class="recipe-section">
-
-        </div>
+        <div class="recipe-section"></div>
     </main>
 
 </body>
