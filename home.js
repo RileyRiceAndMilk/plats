@@ -141,7 +141,9 @@ class RecipeCard {
 
         const ingredientsList = document.createElement('ul');
         ingredientsList.classList.add('ingredients-list');
-        this.recipe.ingredients.forEach(ingredient => {
+        let i = 0;
+        while (i < this.recipe.ingredients.length) {
+            const ingredient = this.recipe.ingredients[i];
             const ingredientItem = document.createElement('li');
             const ingredientName = document.createElement('div');
             ingredientName.classList.add('ingredient-name');
@@ -154,7 +156,8 @@ class RecipeCard {
             ingredientItem.appendChild(ingredientName);
             ingredientItem.appendChild(ingredientQuantity);
             ingredientsList.appendChild(ingredientItem);
-        });
+            i++;
+        }
 
         cardContentContainer.appendChild(title);
         cardContentContainer.appendChild(recetteTitle);
@@ -176,10 +179,12 @@ function updateRecipeCount(recipes) {
 
 function displayRecipes(recipes) {
     recipeSection.innerHTML = '';
-    recipes.forEach(recipe => {
-        const card = RecipeCard.createCard(recipe);
+    let i = 0;
+    while (i < recipes.length) {
+        const card = RecipeCard.createCard(recipes[i]);
         recipeSection.appendChild(card);
-    });
+        i++;
+    }
     updateRecipeCount(recipes);
 }
 
@@ -188,11 +193,13 @@ function initializeFilters(recipes) {
     const appliances = new Set();
     const ustensils = new Set();
 
-    recipes.forEach(recipe => {
-        recipe.ingredients.forEach(ingredient => ingredients.add(ingredient.ingredient.toLowerCase()));
-        appliances.add(recipe.appliance.toLowerCase());
-        recipe.ustensils.forEach(ustensil => ustensils.add(ustensil.toLowerCase()));
-    });
+    let i = 0;
+    while (i < recipes.length) {
+        recipes[i].ingredients.forEach(ingredient => ingredients.add(ingredient.ingredient.toLowerCase()));
+        appliances.add(recipes[i].appliance.toLowerCase());
+        recipes[i].ustensils.forEach(ustensil => ustensils.add(ustensil.toLowerCase()));
+        i++;
+    }
 
     ingredientFilter.setAttribute('placeholder', '');
     applianceFilter.setAttribute('placeholder', '');
@@ -228,13 +235,16 @@ function showSuggestions(value, data, suggestionContainerId) {
         suggestionsContainer.style.display = 'block';
     }
 
-    filteredSuggestions.forEach(suggestion => {
+    let i = 0;
+    while (i < filteredSuggestions.length) {
+        const suggestion = filteredSuggestions[i];
         const suggestionItem = document.createElement('div');
         suggestionItem.classList.add('suggestion-item');
         suggestionItem.textContent = suggestion;
         suggestionItem.addEventListener('click', () => handleSuggestionClick(suggestion, suggestionContainerId));
         suggestionsContainer.appendChild(suggestionItem);
-    });
+        i++;
+    }
 }
 
 function handleSuggestionClick(suggestion, suggestionContainerId) {
@@ -263,22 +273,28 @@ function updateSelectedTags() {
     const utensilTagsContainer = document.getElementById('utensil-tags');
 
     ingredientTagsContainer.innerHTML = '';
-    selectedFilters.ingredients.forEach(ingredient => {
-        const tag = createTag(ingredient, 'ingredients');
+    let i = 0;
+    while (i < selectedFilters.ingredients.length) {
+        const tag = createTag(selectedFilters.ingredients[i], 'ingredients');
         ingredientTagsContainer.appendChild(tag);
-    });
+        i++;
+    }
 
     applianceTagsContainer.innerHTML = '';
-    selectedFilters.appliances.forEach(appliance => {
-        const tag = createTag(appliance, 'appliances');
+    i = 0;
+    while (i < selectedFilters.appliances.length) {
+        const tag = createTag(selectedFilters.appliances[i], 'appliances');
         applianceTagsContainer.appendChild(tag);
-    });
+        i++;
+    }
 
     utensilTagsContainer.innerHTML = '';
-    selectedFilters.ustensils.forEach(ustensil => {
-        const tag = createTag(ustensil, 'ustensils');
+    i = 0;
+    while (i < selectedFilters.ustensils.length) {
+        const tag = createTag(selectedFilters.ustensils[i], 'ustensils');
         utensilTagsContainer.appendChild(tag);
-    });
+        i++;
+    }
 }
 
 function createTag(value, filterType) {
