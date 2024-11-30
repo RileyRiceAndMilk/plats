@@ -28,7 +28,7 @@ let debounceTimer;
 
 const createClearButton = (inputElement) => {
     const clearButton = document.createElement('span');
-    clearButton.classList.add('clear-input');
+    clearButton.classList.add('clear-input','clear-input-search');
     clearButton.textContent = '×';
     inputElement.parentElement.appendChild(clearButton);
     clearButton.style.display = 'none';
