@@ -24,8 +24,6 @@ const ingredientInput = document.querySelector('#ingredient-selector');
 const applianceInput = document.querySelector('#appliance-selector');
 const utensilInput = document.querySelector('#utensil-selector');
 
-let debounceTimer;
-
 const createClearButton = (inputElement) => {
     const clearButton = document.createElement('span');
     clearButton.classList.add('clear-input','clear-input-search');
@@ -210,17 +208,9 @@ function initializeFilters(recipes) {
     applianceFilter.setAttribute('placeholder', '');
     ustensilFilter.setAttribute('placeholder', '');
 
-    ingredientFilter.addEventListener('input', (event) => debounceInput(event, ingredients, 'ingredient-suggestions'));
-    applianceFilter.addEventListener('input', (event) => debounceInput(event, appliances, 'appliance-suggestions'));
-    ustensilFilter.addEventListener('input', (event) => debounceInput(event, ustensils, 'utensil-suggestions'));
-}
-
-function debounceInput(event, data, suggestionContainerId) {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-        const value = event.target.value.trim().toLowerCase();
-        showSuggestions(value, Array.from(data), suggestionContainerId);
-    }, 300);
+    ingredientFilter.addEventListener('input', (event) =>  showSuggestions(event, ingredients, 'ingredient-suggestions'));
+    applianceFilter.addEventListener('input', (event) =>  showSuggestions(event, appliances, 'appliance-suggestions'));
+    ustensilFilter.addEventListener('input', (event) =>  showSuggestions(event, ustensils, 'utensil-suggestions'));
 }
 
 function showSuggestions(value, data, suggestionContainerId) {
