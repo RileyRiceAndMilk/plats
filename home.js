@@ -26,6 +26,18 @@ const utensilInput = document.querySelector('#utensil-selector');
 
 let debounceTimer;
 
+const createClearButton = (inputElement) => {
+    const clearButton = document.createElement('span');
+    clearButton.classList.add('clear-input');
+    clearButton.textContent = '×';
+    inputElement.parentElement.appendChild(clearButton);
+    clearButton.style.display = 'none';
+
+    return clearButton;
+};
+
+const searchClearButton = createClearButton(searchInput);
+
 searchInput.addEventListener('input', () => {
     if (searchInput.value.trim()) {
         searchClearButton.style.display = 'inline';
@@ -39,15 +51,14 @@ searchButton.addEventListener('click', () => {
     filterRecipes();
 });
 
-const createClearButton = (inputElement) => {
-    const clearButton = document.createElement('span');
-    clearButton.classList.add('clear-input');
-    clearButton.textContent = '×';
-    inputElement.parentElement.appendChild(clearButton);
-    clearButton.style.display = 'none';
+searchClearButton.addEventListener('click', () => {
+    searchInput.value = '';
+    searchClearButton.style.display = 'none';
+    selectedFilters.searchQuery = '';
+    filterRecipes();
+});
 
-    return clearButton;
-};
+
 
 const ingredientClearButton = createClearButton(ingredientInput);
 const applianceClearButton = createClearButton(applianceInput);
