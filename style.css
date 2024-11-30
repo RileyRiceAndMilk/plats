@@ -196,6 +196,10 @@ main {
     transition: color 0.2s ease;
 }
 
+.clear-input-search {
+    right: 55px; 
+}
+
 .suggestions-container {
     width: 100%;
     background-color: white;
