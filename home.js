@@ -307,36 +307,42 @@ function removeTag(value, filterType) {
 }
 
 function filterRecipes() {
-    let filteredRecipes = recipes;
-
-    if (selectedFilters.searchQuery) {
-        filteredRecipes = filteredRecipes.filter(recipe => recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()));
-    }
-
-    if (selectedFilters.ingredients.length > 0) {
-        filteredRecipes = filteredRecipes.filter(recipe =>
-            selectedFilters.ingredients.every(ingredient =>
-                recipe.ingredients.some(ingredientObj => ingredientObj.ingredient.toLowerCase().includes(ingredient.toLowerCase()))
-            )
-        );
-    }
-
-    if (selectedFilters.appliances.length > 0) {
-        filteredRecipes = filteredRecipes.filter(recipe =>
-            selectedFilters.appliances.some(appliance => recipe.appliance.toLowerCase().includes(appliance.toLowerCase()))
-        );
-    }
-
-    if (selectedFilters.ustensils.length > 0) {
-        filteredRecipes = filteredRecipes.filter(recipe =>
-            selectedFilters.ustensils.every(ustensil =>
-                recipe.ustensils.some(item => item.toLowerCase().includes(ustensil.toLowerCase()))
-            )
-        );
-    }
-
+    let filteredRecipes = [];
+    recipes.forEach(recipe => {
+        let passesAllFilters = true;  
+        if (selectedFilters.searchQuery && 
+            !recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase())) {
+            passesAllFilters = false;
+        }
+        if (selectedFilters.ingredients.length > 0 && 
+            !selectedFilters.ingredients.every(ingredient =>
+                recipe.ingredients.some(ingredientObj => 
+                    ingredientObj.ingredient.toLowerCase().includes(ingredient.toLowerCase())
+                )
+            )) {
+            passesAllFilters = false;
+        }
+        if (selectedFilters.appliances.length > 0 && 
+            !selectedFilters.appliances.some(appliance => 
+                recipe.appliance.toLowerCase().includes(appliance.toLowerCase())
+            )) {
+            passesAllFilters = false;
+        }
+        if (selectedFilters.ustensils.length > 0 && 
+            !selectedFilters.ustensils.every(ustensil => 
+                recipe.ustensils.some(item => 
+                    item.toLowerCase().includes(ustensil.toLowerCase())
+                )
+            )) {
+            passesAllFilters = false;
+        }
+        if (passesAllFilters) {
+            filteredRecipes.push(recipe);
+        }
+    });
     displayRecipes(filteredRecipes);
 }
+
 
 initializeFilters(recipes);
 displayRecipes(recipes);
