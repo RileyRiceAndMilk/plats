@@ -342,8 +342,15 @@ function filterRecipes() {
         const recipe = filteredRecipes[i];
         let passesAllFilters = true;
 
-        if (selectedFilters.searchQuery && !recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase())) {
-            passesAllFilters = false;
+        if (selectedFilters.searchQuery &&
+            !(
+                recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) || 
+                recipe.description.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) || 
+                recipe.ingredients.some(ingredientObj =>
+                    ingredientObj.ingredient.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) 
+                )
+            )) {
+            passesAllFilters = false; 
         }
         if (selectedFilters.ingredients.length > 0 && !selectedFilters.ingredients.every(ingredient =>
             recipe.ingredients.some(ingredientObj => ingredientObj.ingredient.toLowerCase().includes(ingredient.toLowerCase()))
