@@ -310,8 +310,14 @@ function filterRecipes() {
     let filteredRecipes = [];
     recipes.forEach(recipe => {
         let passesAllFilters = true;  
-        if (selectedFilters.searchQuery && 
-            !recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase())) {
+       if (selectedFilters.searchQuery &&
+            !(
+                recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) || 
+                recipe.description.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) || 
+                recipe.ingredients.some(ingredientObj =>
+                    ingredientObj.ingredient.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) 
+                )
+            )) {
             passesAllFilters = false;
         }
         if (selectedFilters.ingredients.length > 0 && 
