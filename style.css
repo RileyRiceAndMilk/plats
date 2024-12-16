@@ -25,7 +25,7 @@ header {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 85%;
+    width: 87%;
     height: 100%;
     object-fit: cover;
     z-index: -1;
