@@ -20,11 +20,6 @@ const ingredientButton = document.querySelector('#ingredient-button');
 const applianceButton = document.querySelector('#appliance-button');
 const utensilButton = document.querySelector('#utensil-button');
 
-const ingredientInput = document.querySelector('#ingredient-selector');
-const applianceInput = document.querySelector('#appliance-selector');
-const utensilInput = document.querySelector('#utensil-selector');
-
-// Mettez à jour les sélecteurs avec les bons IDs (ID corrigé)
 const ingredientTagsContainer = document.querySelector('#ingredient-tags');
 const applianceTagsContainer = document.querySelector('#appliance-tags');
 const utensilTagsContainer = document.querySelector('#utensil-tags');
@@ -61,9 +56,9 @@ searchClearButton.addEventListener('click', () => {
     filterRecipes();
 });
 
-const ingredientClearButton = createClearButton(ingredientInput);
-const applianceClearButton = createClearButton(applianceInput);
-const utensilClearButton = createClearButton(utensilInput);
+const ingredientClearButton = createClearButton(ingredientFilter);
+const applianceClearButton = createClearButton(applianceFilter);
+const utensilClearButton = createClearButton(ustensilFilter);
 
 const toggleClearButtonVisibility = (inputElement, clearButton) => {
     if (inputElement.value.trim()) {
@@ -73,9 +68,9 @@ const toggleClearButtonVisibility = (inputElement, clearButton) => {
     }
 };
 
-ingredientInput.addEventListener('input', () => toggleClearButtonVisibility(ingredientInput, ingredientClearButton));
-applianceInput.addEventListener('input', () => toggleClearButtonVisibility(applianceInput, applianceClearButton));
-utensilInput.addEventListener('input', () => toggleClearButtonVisibility(utensilInput, utensilClearButton));
+ingredientFilter.addEventListener('input', () => toggleClearButtonVisibility(ingredientFilter, ingredientClearButton));
+applianceFilter.addEventListener('input', () => toggleClearButtonVisibility(applianceFilter, applianceClearButton));
+ustensilFilter.addEventListener('input', () => toggleClearButtonVisibility(ustensilFilter, utensilClearButton));
 
 const handleClearButtonClick = (filterType, clearButton, inputElement) => {
     inputElement.value = '';
@@ -85,9 +80,9 @@ const handleClearButtonClick = (filterType, clearButton, inputElement) => {
     filterRecipes();
 };
 
-ingredientClearButton.addEventListener('click', () => handleClearButtonClick('ingredients', ingredientClearButton, ingredientInput));
-applianceClearButton.addEventListener('click', () => handleClearButtonClick('appliances', applianceClearButton, applianceInput));
-utensilClearButton.addEventListener('click', () => handleClearButtonClick('ustensils', utensilClearButton, utensilInput));
+ingredientClearButton.addEventListener('click', () => handleClearButtonClick('ingredients', ingredientClearButton, ingredientFilter));
+applianceClearButton.addEventListener('click', () => handleClearButtonClick('appliances', applianceClearButton, applianceFilter));
+utensilClearButton.addEventListener('click', () => handleClearButtonClick('ustensils', utensilClearButton, ustensilFilter));
 
 const toggleSuggestions = (buttonId, containerId, inputElement) => {
     const container = document.querySelector(`#${containerId}`);
@@ -95,9 +90,9 @@ const toggleSuggestions = (buttonId, containerId, inputElement) => {
     inputElement.focus();
 };
 
-ingredientButton.addEventListener('click', () => toggleSuggestions('ingredient-button', 'containeur-input-and-suggestions-ingredient', ingredientInput));
-applianceButton.addEventListener('click', () => toggleSuggestions('appliance-button', 'containeur-input-and-suggestions-appliance', applianceInput));
-utensilButton.addEventListener('click', () => toggleSuggestions('utensil-button', 'containeur-input-and-suggestions-utensil', utensilInput));
+ingredientButton.addEventListener('click', () => toggleSuggestions('ingredient-button', 'containeur-input-and-suggestions-ingredient', ingredientFilter));
+applianceButton.addEventListener('click', () => toggleSuggestions('appliance-button', 'containeur-input-and-suggestions-appliance', applianceFilter));
+utensilButton.addEventListener('click', () => toggleSuggestions('utensil-button', 'containeur-input-and-suggestions-utensil', ustensilFilter));
 
 class RecipeCard {
     constructor(recipe) {
@@ -122,7 +117,6 @@ class RecipeCard {
         img.classList.add('recipe-image');
         img.onerror = () => {
             img.style.display = 'none';
-            message.textContent = "Désolé, l'image est indisponible.";
         };
 
         const timeTag = document.createElement('span');
@@ -264,27 +258,39 @@ function handleSuggestionClick(suggestion, suggestionContainerId) {
             updateSelectedTags();
         }
     }
-    filterRecipes();
-}
 
-function removeTag(value, filterType) {
-    const index = selectedFilters[filterType].indexOf(value);
-    if (index !== -1) {
-        selectedFilters[filterType].splice(index, 1);
-    }
-    updateSelectedTags();
     filterRecipes();
 }
 
 function updateTagContainer(container, tags, filterType) {
     container.innerHTML = '';
     tags.forEach(tag => {
-        const tagElement = document.createElement('span');
-        tagElement.classList.add('selected-tag');
-        tagElement.textContent = tag;
-        tagElement.addEventListener('click', () => removeTag(tag, filterType));
+        const tagElement = createTag(tag, filterType);
         container.appendChild(tagElement);
     });
+}
+
+function createTag(value, filterType) {
+    const tag = document.createElement('span');
+    tag.classList.add('selected-tag');
+    tag.textContent = value;
+
+    const closeButton = document.createElement('span');
+    closeButton.classList.add('close-button');
+    closeButton.innerHTML = '<i class="fa-solid fa-x"></i>';
+    closeButton.addEventListener('click', () => removeTag(value, filterType));
+
+    tag.appendChild(closeButton);
+    return tag;
+}
+
+function removeTag(value, filterType) {
+    const index = selectedFilters[filterType].indexOf(value);
+    if (index !== -1) {
+        selectedFilters[filterType].splice(index, 1);
+        updateSelectedTags();
+        filterRecipes();
+    }
 }
 
 function updateSelectedTags() {
@@ -294,47 +300,21 @@ function updateSelectedTags() {
 }
 
 function filterRecipes() {
-    let filteredRecipes = recipes;
+    const filteredRecipes = recipes.filter(recipe => {
+        const matchesIngredients = selectedFilters.ingredients.every(ingredient => recipe.ingredients.some(i => i.ingredient.toLowerCase().includes(ingredient.toLowerCase())));
+        const matchesAppliance = selectedFilters.appliances.every(appliance => recipe.appliance.toLowerCase().includes(appliance.toLowerCase()));
+        const matchesUstensil = selectedFilters.ustensils.every(ustensil => recipe.ustensils.some(u => u.toLowerCase().includes(ustensil.toLowerCase())));
+        const matchesSearch = recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) ||
+                              recipe.description.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase());
 
-    if (selectedFilters.searchQuery) {
-        filteredRecipes = filteredRecipes.filter(recipe =>
-            recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) ||
-            recipe.description.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase())
-        );
-    }
-
-    if (selectedFilters.ingredients.length > 0) {
-        filteredRecipes = filteredRecipes.filter(recipe =>
-            selectedFilters.ingredients.every(ingredient =>
-                recipe.ingredients.some(recipeIngredient =>
-                    recipeIngredient.ingredient.toLowerCase().includes(ingredient.toLowerCase())
-                )
-            )
-        );
-    }
-
-    if (selectedFilters.appliances.length > 0) {
-        filteredRecipes = filteredRecipes.filter(recipe =>
-            selectedFilters.appliances.some(appliance =>
-                recipe.appliance.toLowerCase().includes(appliance.toLowerCase())
-            )
-        );
-    }
-
-    if (selectedFilters.ustensils.length > 0) {
-        filteredRecipes = filteredRecipes.filter(recipe =>
-            selectedFilters.ustensils.every(ustensil =>
-                recipe.ustensils.some(recipeUstensil =>
-                    recipeUstensil.toLowerCase().includes(ustensil.toLowerCase())
-                )
-            )
-        );
-    }
+        return matchesIngredients && matchesAppliance && matchesUstensil && matchesSearch;
+    });
 
     displayRecipes(filteredRecipes);
 }
 
 initializeFilters(recipes);
-displayRecipes(recipes);
+filterRecipes();
+
 
 
