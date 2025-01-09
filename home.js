@@ -1,4 +1,5 @@
 import { recipes } from './recipes.js';
+import { RecipeCard } from './card.js';
 
 const recipeSection = document.querySelector('.recipe-section');
 const ingredientFilter = document.querySelector('#ingredient-selector');
@@ -26,27 +27,23 @@ const utensilInput = document.querySelector('#utensil-selector');
 
 const createClearButton = (inputElement) => {
     const clearButton = document.createElement('span');
-    clearButton.classList.add('clear-input','clear-input-search');
+    clearButton.classList.add('clear-input', 'clear-input-search');
     clearButton.textContent = '×';
     inputElement.parentElement.appendChild(clearButton);
     clearButton.style.display = 'none';
-
     return clearButton;
 };
 
 const searchClearButton = createClearButton(searchInput);
 
 searchInput.addEventListener('input', () => {
-    if (searchInput.value.trim()) {
-        searchClearButton.style.display = 'inline';
-    } else {
-        searchClearButton.style.display = 'none';
-    }
-});
+    const query = searchInput.value.trim();
+    searchClearButton.style.display = query ? 'inline' : 'none';
 
-searchButton.addEventListener('click', () => {
-    selectedFilters.searchQuery = searchInput.value.trim();
-    filterRecipes();
+    if (query.length >= 3 || query.length === 0) {
+        selectedFilters.searchQuery = query;
+        filterRecipes();
+    }
 });
 
 searchClearButton.addEventListener('click', () => {
@@ -56,18 +53,12 @@ searchClearButton.addEventListener('click', () => {
     filterRecipes();
 });
 
-
-
 const ingredientClearButton = createClearButton(ingredientInput);
 const applianceClearButton = createClearButton(applianceInput);
 const utensilClearButton = createClearButton(utensilInput);
 
 const toggleClearButtonVisibility = (inputElement, clearButton) => {
-    if (inputElement.value.trim()) {
-        clearButton.style.display = 'inline';
-    } else {
-        clearButton.style.display = 'none';
-    }
+    clearButton.style.display = inputElement.value.trim() ? 'inline' : 'none';
 };
 
 ingredientInput.addEventListener('input', () => toggleClearButtonVisibility(ingredientInput, ingredientClearButton));
@@ -86,100 +77,42 @@ ingredientClearButton.addEventListener('click', () => handleClearButtonClick('in
 applianceClearButton.addEventListener('click', () => handleClearButtonClick('appliances', applianceClearButton, applianceInput));
 utensilClearButton.addEventListener('click', () => handleClearButtonClick('ustensils', utensilClearButton, utensilInput));
 
-const toggleSuggestions = (buttonId, containerId, inputElement) => {
+const toggleSuggestions = (containerId, inputElement, data, suggestionContainerId) => {
     const container = document.querySelector(`#${containerId}`);
-    container.style.display = container.style.display === 'none' ? 'block' : 'none';
+    container.style.display = 'block';
     inputElement.focus();
+
+    if (!inputElement.value.trim()) {
+        showSuggestions('', Array.from(data), suggestionContainerId);
+    }
 };
 
-ingredientButton.addEventListener('click', () => toggleSuggestions('ingredient-button', 'containeur-input-and-suggestions-ingredient', ingredientInput));
-applianceButton.addEventListener('click', () => toggleSuggestions('appliance-button', 'containeur-input-and-suggestions-appliance', applianceInput));
-utensilButton.addEventListener('click', () => toggleSuggestions('utensil-button', 'containeur-input-and-suggestions-utensil', utensilInput));
+ingredientButton.addEventListener('click', () =>
+    toggleSuggestions(
+        'containeur-input-and-suggestions-ingredient',
+        ingredientInput,
+        new Set(filteredRecipes.flatMap(recipe => recipe.ingredients.map(ing => ing.ingredient.toLowerCase()))),
+        'ingredient-suggestions'
+    )
+);
 
-class RecipeCard {
-    constructor(recipe) {
-        this.recipe = recipe;
-    }
+applianceButton.addEventListener('click', () =>
+    toggleSuggestions(
+        'containeur-input-and-suggestions-appliance',
+        applianceInput,
+        new Set(filteredRecipes.map(recipe => recipe.appliance.toLowerCase())),
+        'appliance-suggestions'
+    )
+);
 
-    static createCard(recipe) {
-        const card = new RecipeCard(recipe);
-        return card.createCardContent();
-    }
-
-    createCardContent() {
-        const card = document.createElement('article');
-        card.classList.add('recipe-card');
-        card.setAttribute('data-recipe-id', this.recipe.id);
-
-        const imageContainer = document.createElement('div');
-        imageContainer.classList.add('image-container');
-        const img = document.createElement('img');
-        img.src = `recipes/${this.recipe.image}`;
-        img.alt = `Image de ${this.recipe.name}`;
-        img.classList.add('recipe-image');
-        img.onerror = () => {
-            img.style.display = 'none';
-            message.textContent = "Désolé, l'image est indisponible.";
-        };
-
-        const timeTag = document.createElement('span');
-        timeTag.classList.add('time-tag');
-        timeTag.textContent = `${this.recipe.time} min`;
-
-        imageContainer.appendChild(img);
-        imageContainer.appendChild(timeTag);
-
-        const cardContentContainer = document.createElement('div');
-        cardContentContainer.classList.add('card-content-container');
-
-        const title = document.createElement('h2');
-        title.id = `recipe-${this.recipe.id}`;
-        title.textContent = this.recipe.name;
-
-        const recetteTitle = document.createElement('h3');
-        recetteTitle.classList.add('recette-title');
-        recetteTitle.textContent = 'RECETTE';
-
-        const description = document.createElement('p');
-        description.classList.add('recipe-description');
-        description.textContent = this.recipe.description;
-
-        const ingredientsTitle = document.createElement('h4');
-        ingredientsTitle.classList.add('ingredients-title');
-        ingredientsTitle.textContent = 'Ingrédients';
-
-        const ingredientsList = document.createElement('ul');
-        ingredientsList.classList.add('ingredients-list');
-        let i = 0;
-        while (i < this.recipe.ingredients.length) {
-            const ingredient = this.recipe.ingredients[i];
-            const ingredientItem = document.createElement('li');
-            const ingredientName = document.createElement('div');
-            ingredientName.classList.add('ingredient-name');
-            ingredientName.textContent = ingredient.ingredient;
-
-            const ingredientQuantity = document.createElement('div');
-            ingredientQuantity.classList.add('ingredient-quantity');
-            ingredientQuantity.textContent = `${ingredient.quantity || ''} ${ingredient.unit || ''}`;
-
-            ingredientItem.appendChild(ingredientName);
-            ingredientItem.appendChild(ingredientQuantity);
-            ingredientsList.appendChild(ingredientItem);
-            i++;
-        }
-
-        cardContentContainer.appendChild(title);
-        cardContentContainer.appendChild(recetteTitle);
-        cardContentContainer.appendChild(description);
-        cardContentContainer.appendChild(ingredientsTitle);
-        cardContentContainer.appendChild(ingredientsList);
-
-        card.appendChild(imageContainer);
-        card.appendChild(cardContentContainer);
-
-        return card;
-    }
-}
+utensilButton.addEventListener('click', () =>
+    toggleSuggestions(
+        'containeur-input-and-suggestions-utensil',
+        utensilInput,
+        new Set(filteredRecipes.flatMap(recipe => recipe.ustensils.map(ut => ut.toLowerCase()))),
+        'utensil-suggestions'
+    )
+);
 
 function updateRecipeCount(recipes) {
     const recipeCount = recipes.length;
@@ -204,16 +137,16 @@ function initializeFilters(recipes) {
 
     let i = 0;
     while (i < recipes.length) {
+        const recipe = recipes[i];
         let j = 0;
-        while (j < recipes[i].ingredients.length) {
-            ingredients.add(recipes[i].ingredients[j].ingredient.toLowerCase());
+        while (j < recipe.ingredients.length) {
+            ingredients.add(recipe.ingredients[j].ingredient.toLowerCase());
             j++;
         }
-        appliances.add(recipes[i].appliance.toLowerCase());
-
+        appliances.add(recipe.appliance.toLowerCase());
         let k = 0;
-        while (k < recipes[i].ustensils.length) {
-            ustensils.add(recipes[i].ustensils[k].toLowerCase());
+        while (k < recipe.ustensils.length) {
+            ustensils.add(recipe.ustensils[k].toLowerCase());
             k++;
         }
         i++;
@@ -230,19 +163,15 @@ function initializeFilters(recipes) {
     );
 }
 
-
 function showSuggestions(value, data, suggestionContainerId) {
     const suggestionsContainer = document.querySelector(`#${suggestionContainerId}`);
     suggestionsContainer.innerHTML = '';
 
-    if (value === '') {
-        suggestionsContainer.style.display = 'none';
-        return;
-    }
+    const filteredSuggestions = value
+        ? data.filter((item) => item.includes(value.toLowerCase()))
+        : data;
 
-    const filteredSuggestions = data.filter(item => item.toLowerCase().includes(value.toLowerCase()));
-
-    if (filteredSuggestions.length === 0) {
+    if (!filteredSuggestions.length) {
         suggestionsContainer.style.display = 'none';
     } else {
         suggestionsContainer.style.display = 'block';
@@ -250,34 +179,31 @@ function showSuggestions(value, data, suggestionContainerId) {
 
     let i = 0;
     while (i < filteredSuggestions.length) {
-        const suggestion = filteredSuggestions[i];
         const suggestionItem = document.createElement('div');
         suggestionItem.classList.add('suggestion-item');
-        suggestionItem.textContent = suggestion;
-        suggestionItem.addEventListener('click', () => handleSuggestionClick(suggestion, suggestionContainerId));
+        suggestionItem.textContent = filteredSuggestions[i];
+        suggestionItem.addEventListener('click', () =>
+            handleSuggestionClick(filteredSuggestions[i], suggestionContainerId)
+        );
         suggestionsContainer.appendChild(suggestionItem);
         i++;
     }
 }
 
 function handleSuggestionClick(suggestion, suggestionContainerId) {
-    if (suggestionContainerId === 'ingredient-suggestions') {
-        if (!selectedFilters.ingredients.includes(suggestion)) {
-            selectedFilters.ingredients.push(suggestion);
-            updateSelectedTags();
-        }
-    } else if (suggestionContainerId === 'appliance-suggestions') {
-        if (!selectedFilters.appliances.includes(suggestion)) {
-            selectedFilters.appliances.push(suggestion);
-            updateSelectedTags();
-        }
-    } else if (suggestionContainerId === 'utensil-suggestions') {
-        if (!selectedFilters.ustensils.includes(suggestion)) {
-            selectedFilters.ustensils.push(suggestion);
-            updateSelectedTags();
-        }
+    const filterKey = suggestionContainerId.split('-')[0];
+    const keyMapping = {
+        ingredient: 'ingredients',
+        appliance: 'appliances',
+        utensil: 'ustensils'
+    };
+    const key = keyMapping[filterKey];
+
+    if (key && !selectedFilters[key].includes(suggestion)) {
+        selectedFilters[key].push(suggestion);
+        updateSelectedTags();
+        filterRecipes();
     }
-    filterRecipes();
 }
 
 function updateSelectedTags() {
@@ -333,48 +259,97 @@ function removeTag(value, filterType) {
     filterRecipes();
 }
 
-function filterRecipes() {
-    let filteredRecipes = recipes;
+let filteredRecipes = [];
+
+function matchesSearchQuery(recipe, searchQuery) {
+    if (!searchQuery) return true;
+    const lowerCaseQuery = searchQuery.toLowerCase();
+
+    let match = false;
+   
+    const fieldsToCheck = [
+        recipe.name.toLowerCase(),
+        recipe.description.toLowerCase(),
+        ...recipe.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())
+    ];
+    
     let i = 0;
-    const tempFilteredRecipes = [];  
-
-    while (i < filteredRecipes.length) {
-        const recipe = filteredRecipes[i];
-        let passesAllFilters = true;
-
-        if (selectedFilters.searchQuery &&
-            !(
-                recipe.name.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) || 
-                recipe.description.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) || 
-                recipe.ingredients.some(ingredientObj =>
-                    ingredientObj.ingredient.toLowerCase().includes(selectedFilters.searchQuery.toLowerCase()) 
-                )
-            )) {
-            passesAllFilters = false; 
-        }
-        if (selectedFilters.ingredients.length > 0 && !selectedFilters.ingredients.every(ingredient =>
-            recipe.ingredients.some(ingredientObj => ingredientObj.ingredient.toLowerCase().includes(ingredient.toLowerCase()))
-        )) {
-            passesAllFilters = false;
-        }
-        if (selectedFilters.appliances.length > 0 && !selectedFilters.appliances.some(appliance =>
-            recipe.appliance.toLowerCase().includes(appliance.toLowerCase())
-        )) {
-            passesAllFilters = false;
-        }
-        if (selectedFilters.ustensils.length > 0 && !selectedFilters.ustensils.every(ustensil =>
-            recipe.ustensils.some(item => item.toLowerCase().includes(ustensil.toLowerCase()))
-        )) {
-            passesAllFilters = false;
-        }
-        if (passesAllFilters) {
-            tempFilteredRecipes.push(recipe);
+    while (i < fieldsToCheck.length) {
+        if (fieldsToCheck[i].includes(lowerCaseQuery)) {
+            match = true;
         }
         i++;
     }
-    displayRecipes(tempFilteredRecipes);
+
+    return match;
 }
 
+function filterRecipes() {
+    filteredRecipes = [];  
+
+    let i = 0;
+    while (i < recipes.length) {
+        const recipe = recipes[i];
+        const searchMatch = matchesSearchQuery(recipe, selectedFilters.searchQuery);
+
+        const matchesIngredients =
+            !selectedFilters.ingredients.length ||
+            selectedFilters.ingredients.every((ingredient) =>
+                recipe.ingredients.some(
+                    (ingredientObj) => ingredientObj.ingredient.toLowerCase() === ingredient.toLowerCase()
+                )
+            );
+
+        const matchesAppliances =
+            !selectedFilters.appliances.length ||
+            selectedFilters.appliances.includes(recipe.appliance.toLowerCase());
+
+        const matchesUstensils =
+            !selectedFilters.ustensils.length ||
+            selectedFilters.ustensils.every((ustensil) =>
+                recipe.ustensils.includes(ustensil.toLowerCase())
+            );
+
+        if (searchMatch && matchesIngredients && matchesAppliances && matchesUstensils) {
+            filteredRecipes.push(recipe); 
+        }
+        i++;
+    }
+
+    displayRecipes(filteredRecipes);
+    updateSuggestions(filteredRecipes);
+}
+
+document.querySelector('button').addEventListener('click', () => {
+    console.log(filteredRecipes);
+});
+
+function updateSuggestions(filteredRecipes) {
+    const ingredients = new Set();
+    const appliances = new Set();
+    const ustensils = new Set();
+
+    let i = 0;
+    while (i < filteredRecipes.length) {
+        const recipe = filteredRecipes[i];
+        let j = 0;
+        while (j < recipe.ingredients.length) {
+            ingredients.add(recipe.ingredients[j].ingredient.toLowerCase());
+            j++;
+        }
+        appliances.add(recipe.appliance.toLowerCase());
+        let k = 0;
+        while (k < recipe.ustensils.length) {
+            ustensils.add(recipe.ustensils[k].toLowerCase());
+            k++;
+        }
+        i++;
+    }
+
+    showSuggestions('', Array.from(ingredients), 'ingredient-suggestions');
+    showSuggestions('', Array.from(appliances), 'appliance-suggestions');
+    showSuggestions('', Array.from(ustensils), 'utensil-suggestions');
+}
 
 initializeFilters(recipes);
 displayRecipes(recipes);
